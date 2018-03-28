@@ -1,0 +1,61 @@
+.Post {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    border-bottom: 1px solid black;
+    display: flex;
+}
+
+.Post--Visited {
+    opacity: 0.9;
+    color: gainsboro;
+}
+
+.Post--Visited .Post__Favicon img {
+    filter: grayscale(100%);
+}
+
+.Post__Favicon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 2;
+}
+
+.Post__Favicon img {
+    border-radius: 50%;
+}
+
+.Post__Content {
+    display: flex;
+    flex: 10;
+}
+
+.Post__Data {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 11;
+}
+
+.Post__Link span {
+    float: left;
+    color: gray;
+}
+
+.Post__Title {
+    text-align: left;
+}
+
+.Post__Score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
