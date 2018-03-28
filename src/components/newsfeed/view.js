@@ -18,7 +18,7 @@ export default class Newsfeed extends Component {
     }
 
     _rowRenderer(options) {
-        if (options.index === this.store.length - 1 && !this.store.isFetching && options.isVisible) {
+        if (options.index === this.store.posts.length - 1 && !this.store.isFetching && options.isVisible && !options.isScrolling) {
             console.log('fetch more');
             this.store.fetchPosts()
         }
