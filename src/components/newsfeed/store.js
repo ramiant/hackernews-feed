@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from "mobx";
+import { observable, action, reaction } from "mobx";
 
 class NewsfeedStore {
     @observable isFetching = false
@@ -23,8 +23,22 @@ class NewsfeedStore {
         return this.posts.find((e) => e.id === id);
     }
 
-    @computed get length() {
-        return this.posts.length;
+    filterFunc() {
+        switch (this.filterType) {
+            case 'all':
+                return function (e) {
+                    return true;
+                }
+            case 'unread':
+                return function(e) {
+                    return !e.isVisited;
+                }
+            case 'read':
+                return function(e) {
+                    return e.isVisited;
+                }
+        }
+        
     }
 
     @action fetchPost(id) {
@@ -34,16 +48,14 @@ class NewsfeedStore {
             // Update current id
             this.currentId = id;
             // Push from stored posts
-            this.posts.push(JSON.parse(_storedPost));
+            this.allPosts.push(JSON.parse(_storedPost));
             // Return as resolved promise
             return Promise.resolve(JSON.parse(_storedPost));
         } else {
             if (!localStorage.getItem('fetchedPosts')) {
                 localStorage.setItem('fetchedPosts', JSON.stringify([]));
-            } else {
-                const fetchedPosts = JSON.parse(localStorage.getItem('fetchedPosts'));
-                if (fetchedPosts.includes(id))
-                    return this.fetchPost(id - 1);
+            } else if (JSON.parse(localStorage.getItem('fetchedPosts')).includes(id)) {
+                return this.fetchPost(id - 1);
             }
             
             return fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`).then(res => {
@@ -57,7 +69,7 @@ class NewsfeedStore {
                     if (body.type === "story" && body.dead !== true && body.deleted !== true) {
                         body.isVisible = true;
                         body.isVisited = false;
-                        this.posts.push(body);
+                        this.allPosts.push(body);
                         localStorage.setItem(id, JSON.stringify(body));
                         this.currentId = id;
                     } else {
@@ -95,21 +107,7 @@ class NewsfeedStore {
     }
 
     @action filterBy(value) {
-        switch (value) {
-            case "all":
-                this.posts.forEach(post => post.isVisible = true);
-                break;
-            case "unread":
-                this.posts.forEach((post) => {
-                    post.isVisible = !post.isVisited;
-                })
-                break;
-            case "read":
-                this.posts.forEach((post) => {
-                    post.isVisible = post.isVisited;
-                })
-                break;
-        }
+        this.posts.replace(this.allPosts.filter(this.filterFunc()));
     }
 }
 
@@ -120,6 +118,12 @@ window.store = store;
 // Reactions
 reaction(() => store.filterType, (value) => {
     store.filterBy(value);    
+});
+
+reaction(() => store.allPosts.length, (len) => {
+    if (store.filterFunc()(store.allPosts[len - 1])) {
+        store.posts.push(store.allPosts[len - 1]);
+    }
 });
 
 export default store;
