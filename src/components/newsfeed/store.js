@@ -80,16 +80,20 @@ class NewsfeedStore {
 
     @action fetchPosts() {
         this.getMax().then(id => {
+            console.info("%cFetching started...", "color: blue");
+
             if (this.maxitem === -1) {
                 this.maxitem = Number(id);
                 this.currentId = this.maxitem;
             }
 
             const fetchRest = () => {
+                
                 if (this.posts.length % this.perPage !== 0 || this.posts.length === 0) {
                     this.fetchPost(this.currentId - 1).then(fetchRest);
                 } else {
                     this.isFetching = false;
+                    console.info("%cFetching ended...", "color: red");
                 }
             }
             

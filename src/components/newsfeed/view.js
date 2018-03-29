@@ -19,10 +19,8 @@ export default class Newsfeed extends Component {
 
     _rowRenderer(options) {
         // Add !options.isScrolling to fetch when scrolling ends
-        if (options.index === this.store.posts.length - 1 && !this.store.isFetching && options.isVisible) {
-            console.info('fetch more');
+        if (options.index === this.store.posts.length - 1 && !this.store.isFetching && options.isVisible)
             this.store.fetchPosts()
-        }
         
         return (
             <div
