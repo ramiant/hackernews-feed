@@ -7,8 +7,11 @@ import './style.css';
 export default class Post extends Component {
     render() {
         return (
-            <div className={`Post ${this.store.getPost(this.props.id).isVisited ? 'Post--Visited' : ''}`} onClick={this._onClick.bind(this)}>
-                <div className="Post__Favicon">
+            <div 
+                className={`Post ${this.store.getPost(this.props.id).isVisited ? 'Post--Visited' : ''}`} 
+                onClick={this.store.getPost(this.props.id).type !== "mock" ? this._onClick.bind(this) : null}
+            >
+                <div className={`Post__Favicon ${this.store.getPost(this.props.id).type === "mock" ? 'hidden' : ''}`}>
                     <span>&#x25C9;</span>
                     <img 
                         src={this.props.url ? "https://www.google.com/s2/favicons?domain_url=" + new URL(this.props.url).hostname : "http://via.placeholder.com/30x30"}

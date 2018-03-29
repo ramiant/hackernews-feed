@@ -64,7 +64,7 @@ class NewsfeedStore {
                     updatedPosts.push(body.id);
                     localStorage.setItem('fetchedPosts', JSON.stringify(updatedPosts));
 
-                    if (body.type === "story" && body.dead !== true && body.deleted !== true) {
+                    if ((body.type === "story" || body.type === "mock") && body.dead !== true && body.deleted !== true) {
                         body.isVisible = true;
                         body.isVisited = false;
                         this.allPosts.push(body);
@@ -108,7 +108,7 @@ class NewsfeedStore {
         this.posts.find((e) => e.id === id).isVisited = true;
     }
 
-    @action filterBy(value) {
+    @action filterBy() {
         this.posts.replace(this.allPosts.filter(this.isValid.bind(this)));
     }
 }
@@ -117,8 +117,12 @@ const store = new NewsfeedStore().fetchPosts();
 
 // Reactions
 reaction(() => store.filterType, (value) => {
-    store.filterBy(value);    
+    store.filterBy();    
 });
+
+reaction(() => store.filterScore, (value) => {
+    store.filterBy();
+})
 
 reaction(() => store.allPosts.length, (length) => {
     const lastPost = store.allPosts[length - 1];
@@ -126,8 +130,20 @@ reaction(() => store.allPosts.length, (length) => {
         store.posts.push(lastPost);
 });
 
-reaction(() => store.filterScore, (value) => {
-    store.posts.replace(store.allPosts.filter(store.isValid.bind(store)));
-})
+// Mock reaction
+reaction(() => store.posts.length, (length) => {
+    if (!length) {
+        const mock = {
+            id: -1,
+            type: "mock",
+            title: 'No more posts to show, try changing filters!'
+        };
+        store.posts.push(mock);
+    } else if (length === 2) {
+        if (store.posts[0].type === "mock") {
+            store.posts.splice(0, 0);
+        }
+    }
+});
 
 export default store;
