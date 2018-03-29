@@ -114,6 +114,8 @@ class NewsfeedStore {
     }
 }
 
+const store = new NewsfeedStore().fetchPosts();
+
 // Reactions
 reaction(() => store.filterType, (value) => {
     store.filterBy(value);    
@@ -131,4 +133,4 @@ reaction(() => store.filterScore, (value) => {
     }))
 })
 
-export default new NewsfeedStore().fetchPosts();
+export default store;
