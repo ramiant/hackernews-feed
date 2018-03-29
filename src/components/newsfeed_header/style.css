@@ -9,6 +9,7 @@ nav {
 }
 
 .btn-group button {
+    outline: none;
     flex: 1;
     background-color: #4CAF50; /* Green background */
     border: 1px solid green; /* Green border */
@@ -30,7 +31,7 @@ nav {
 }
 
 /* Add a background color on hover */
-.btn-group button:hover {
+.btn-group button:hover, .btn-group .active {
     background-color: #3e8e41;
 }
 

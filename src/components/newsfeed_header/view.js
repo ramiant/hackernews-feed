@@ -6,7 +6,8 @@ export default class NewsFeedHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scoreFilter: 0
+            scoreFilter: 0,
+            activeTab: "all"
         }
     }
 
@@ -27,9 +28,9 @@ export default class NewsFeedHeader extends Component {
                         />
                     </div>
                     <div className="btn-group">
-                        <button onClick={this._changeFilter.bind(this)} value="all" data-ui="type-filter">Show All</button>
-                        <button onClick={this._changeFilter.bind(this)} value="unread" data-ui="type-filter">Show Unread</button>
-                        <button onClick={this._changeFilter.bind(this)} value="read" data-ui="type-filter">Show Read</button>
+                        <button className={this.state.activeTab === "all" ? 'active' : ''} onClick={this._changeFilter.bind(this)} value="all" data-ui="type-filter">Show All</button>
+                        <button className={this.state.activeTab === "unread" ? 'active' : ''} onClick={this._changeFilter.bind(this)} value="unread" data-ui="type-filter">Show Unread</button>
+                        <button className={this.state.activeTab === "read" ? 'active' : ''} onClick={this._changeFilter.bind(this)} value="read" data-ui="type-filter">Show Read</button>
                     </div>
                 </header>
             </nav>
@@ -37,10 +38,15 @@ export default class NewsFeedHeader extends Component {
     }
 
     _changeFilter(ev) {
+        this._setActive(ev);
         if (ev.target.getAttribute("data-ui") === "type-filter")
             store.filterType = ev.target.value;
         else if (ev.target.getAttribute("data-ui") === "score-filter")
             store.filterScore = Number(ev.target.value)
+    }
+
+    _setActive(ev) {
+        this.setState({ activeTab: ev.target.value })
     }
 
     _changeScoreFilter(ev) {
