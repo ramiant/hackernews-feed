@@ -5,9 +5,10 @@ class NewsfeedStore {
     @observable posts = []
     @observable allPosts = []
     @observable filterType = 'all'
+    @observable filterScore = 0
 
     constructor() {
-        this.perPage = 10;
+        this.perPage = 50;
         this.maxitem = -1;
         this.currentId = -1;
     }
@@ -37,6 +38,8 @@ class NewsfeedStore {
                 return function(e) {
                     return e.isVisited;
                 }
+            default:
+                return () => { true }
         }
         
     }
@@ -125,5 +128,11 @@ reaction(() => store.allPosts.length, (len) => {
         store.posts.push(store.allPosts[len - 1]);
     }
 });
+
+reaction(() => store.filterScore, (value) => {
+    store.posts.replace(store.allPosts.filter((post) => {
+        return post.score >= value && store.filterFunc()(post);
+    }))
+})
 
 export default store;
