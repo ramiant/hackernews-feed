@@ -24,11 +24,12 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    flex: 2;
+    flex: 1;
 }
 
 .Post__Favicon span {
     color: orange;
+    font-size: 10px;
 }
 
 .Post__Favicon img {
@@ -37,7 +38,8 @@
 
 .Post__Content {
     display: flex;
-    flex: 10;
+    flex: 11;
+    margin-left: 10px;
 }
 
 .Post__Data {
@@ -47,6 +49,12 @@
     flex: 11;
 }
 
+.Post__Link {
+    display: flex;
+    align-items: flex-end;
+    flex: 4;
+}
+
 .Post__Link span {
     float: left;
     color: gray;
@@ -54,6 +62,9 @@
 
 .Post__Title {
     text-align: left;
+    flex: 8;
+    display: flex;
+    align-items: center;
 }
 
 .Post__Score {

@@ -13,7 +13,7 @@ export default class Newsfeed extends Component {
 
     render() {
         return (
-            <List className="NewsFeed" height={400} width={700} rowHeight={60} rowCount={this.store.posts.length} rowRenderer={this._rowRenderer.bind(this)}/>
+            <List className="NewsFeed" height={400} width={700} rowHeight={80} rowCount={this.store.posts.length} rowRenderer={this._rowRenderer.bind(this)}/>
         );
     }
 
