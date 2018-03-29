@@ -18,7 +18,7 @@ export default class Post extends Component {
                 </div>
                 <div className="Post__Content">
                     <div className="Post__Data">
-                        <div className="Post__Link">
+                        <div className={`Post__Link ${this.props.url ? '' : 'hidden'}`}>
                             <span>{this.props.url ? new URL(this.props.url).hostname : ''}</span>
                         </div>
                         <div className="Post__Title">
@@ -34,7 +34,9 @@ export default class Post extends Component {
     }
 
     _onClick(ev) {
-        window.open(this.props.url, '_blank');
+        if (this.props.url)
+            window.open(this.props.url, '_blank');
+
         this.visit();
     }
 
