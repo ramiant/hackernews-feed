@@ -11,6 +11,15 @@
     background-color: ghostwhite;
 }
 
+.Post--Mock:hover {
+    background-color: white;
+    cursor: default;
+}
+
+.Post--Mock .Post__Content .Post__Data .Post__Title {
+    justify-content: center;
+}
+
 .Post--Visited {
     opacity: 0.9;
     color: gainsboro;
