@@ -7,6 +7,10 @@
     display: flex;
 }
 
+.Post:hover {
+    background-color: ghostwhite;
+}
+
 .Post--Visited {
     opacity: 0.9;
     color: gainsboro;
