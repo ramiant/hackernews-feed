@@ -24,24 +24,19 @@ class NewsfeedStore {
         return this.posts.find((e) => e.id === id);
     }
 
+    isValid(post) {
+        return this.filterFunc()(post) && post.score >= this.filterScore;
+    }
+
     filterFunc() {
         switch (this.filterType) {
-            case 'all':
-                return function (e) {
-                    return true;
-                }
             case 'unread':
-                return function(e) {
-                    return !e.isVisited;
-                }
+                return (e) => { return !e.isVisited; }
             case 'read':
-                return function(e) {
-                    return e.isVisited;
-                }
+                return (e) => { return e.isVisited; }
             default:
-                return () => { true }
+                return () => { return true; }
         }
-        
     }
 
     @action fetchPost(id) {
@@ -110,7 +105,7 @@ class NewsfeedStore {
     }
 
     @action filterBy(value) {
-        this.posts.replace(this.allPosts.filter(this.filterFunc()));
+        this.posts.replace(this.allPosts.filter(this.isValid.bind(this)));
     }
 }
 
@@ -121,16 +116,14 @@ reaction(() => store.filterType, (value) => {
     store.filterBy(value);    
 });
 
-reaction(() => store.allPosts.length, (len) => {
-    if (store.filterFunc()(store.allPosts[len - 1])) {
-        store.posts.push(store.allPosts[len - 1]);
-    }
+reaction(() => store.allPosts.length, (length) => {
+    const lastPost = store.allPosts[length - 1];
+    if (store.isValid(lastPost)) 
+        store.posts.push(lastPost);
 });
 
 reaction(() => store.filterScore, (value) => {
-    store.posts.replace(store.allPosts.filter((post) => {
-        return post.score >= value && store.filterFunc()(post);
-    }))
+    store.posts.replace(store.allPosts.filter(store.isValid.bind(store)));
 })
 
 export default store;
